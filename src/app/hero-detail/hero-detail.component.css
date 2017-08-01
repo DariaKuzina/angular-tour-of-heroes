@@ -1,0 +1,7 @@
+input {
+    border-radius: 3px;
+}
+label {
+    margin-right: 2px;
+    text-transform: capitalize;
+}
