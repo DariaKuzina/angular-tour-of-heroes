@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Directive, HostListener, HostBinding } from '@angular/core';
 import { Hero } from './../../models/hero'
 
 @Component({
@@ -7,23 +7,25 @@ import { Hero } from './../../models/hero'
   styleUrls: ['./hero-detail.component.css']
 })
 export class HeroDetailComponent implements OnInit {
-  @Input() hero : Hero;
+  @Input() hero: Hero;
   @Output() markDeleted = new EventEmitter<Hero>();
+  fontColor: string;
+
   constructor() { }
 
   ngOnInit() {
   }
-  saveChanges(p: string, st : string, sp : string) {
+  saveChanges(p: string, st: string, sp: string) {
 
     let power = +p;
     let stamina = +st;
     let speed = +sp;
 
-    if (isNaN(power) || power < 0 || isNaN(speed) || speed < 0 || isNaN(stamina) || stamina < 0){
+    if (isNaN(power) || power < 0 || isNaN(speed) || speed < 0 || isNaN(stamina) || stamina < 0) {
       alert('Every skill must be non-negative number');
       return;
     }
-    else if ((power + speed + stamina) != 100){
+    else if ((power + speed + stamina) != 100) {
       alert('Sum of skills must me 100');
       return;
     }
@@ -32,7 +34,18 @@ export class HeroDetailComponent implements OnInit {
     this.hero.speed = speed;
     this.hero.stamina = stamina;
   }
-  delete(){
+  delete() {
     this.markDeleted.emit(this.hero);
+  }
+
+  @HostBinding("style.color") get getFontColour() {
+
+    return this.fontColor;
+  }
+  @HostListener("mouseenter") onMouseEnter() {
+    this.fontColor = "#0651cc";
+  }
+  @HostListener("mouseleave") onMouseLeave() {
+    this.fontColor = "black";
   }
 }
