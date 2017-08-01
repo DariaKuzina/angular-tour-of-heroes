@@ -1,7 +1,14 @@
 input {
     border-radius: 3px;
+    margin: 2px;
 }
 label {
-    margin-right: 2px;
+    margin: 2px;
     text-transform: capitalize;
 }
+  button.confirm{
+    margin-top: 5px;
+    height: 30px;
+    width: 90px;
+    border-radius: 4px;
+  }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Hero } from './../models/hero'
 import { HeroDetailComponent } from './hero-detail/hero-detail.component'
 import { HeroService } from './hero.service'
@@ -10,13 +10,14 @@ import { HeroService } from './hero.service'
   providers: [HeroService]
 })
 export class AppComponent implements OnInit {
-  title : string;
+  title: string;
   heroes: Hero[];
   selectedHero: Hero;
 
-constructor(private heroService : HeroService){
+  constructor(private heroService: HeroService) {
 
-}
+  }
+
 
   ngOnInit() {
     this.title = 'Tour of heroes';
@@ -24,7 +25,13 @@ constructor(private heroService : HeroService){
   }
 
   onSelect(hero: Hero): void {
-    this.selectedHero = hero;   
+    this.selectedHero = hero;
   }
-
+  delete(hero: Hero): void {
+    var index = this.heroes.indexOf(hero, 0);
+    if (index > -1) {
+      this.heroes.splice(index, 1);
+    }
+    this.selectedHero = null;
+  }
 }

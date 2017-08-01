@@ -6,5 +6,5 @@
   </li>
 </ul>
 <div *ngIf="selectedHero">
- <hero-detail [hero]="selectedHero"></hero-detail>
+ <hero-detail [hero]="selectedHero" (markDeleted)="delete($event)" ></hero-detail>
 </div>
