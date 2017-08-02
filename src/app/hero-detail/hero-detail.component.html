@@ -1,11 +1,11 @@
-<div id = "heroDetails">
+<div *ngIf="hero" id = "heroDetails">
   <h2>{{hero.name}} details</h2>
    <div>
     <label>id: </label> {{hero.id}}
   </div>
   <div>
     <label>name: </label>
-    <input [(ngModel)]="hero.name" placeholder="name">
+     <input [(ngModel)]="hero.name" placeholder="name"> 
   </div> 
   <div>
     <label>power: </label>
@@ -25,3 +25,4 @@
   <button class="confirm" (click)="saveChanges(power.value, stamina.value, speed.value)">Save skills</button>
   <button class="confirm" (click)="delete()">Delete</button>
 </div>
+<button class="nav" (click)="goBack()">Back</button>

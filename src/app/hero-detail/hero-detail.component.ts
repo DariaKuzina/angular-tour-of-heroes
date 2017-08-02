@@ -1,5 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, Directive, HostListener, HostBinding } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Directive, HostListener, HostBinding } from '@angular/core';
 import { Hero } from './../../models/hero'
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Location } from '@angular/common';
+import { HeroService } from './../hero.service'
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'hero-detail',
@@ -7,15 +11,23 @@ import { Hero } from './../../models/hero'
   styleUrls: ['./hero-detail.component.css']
 })
 export class HeroDetailComponent implements OnInit {
-  @Input() hero: Hero;
+  hero: Hero;
   @Output() markDeleted = new EventEmitter<Hero>();
   fontColor: string;
 
-  constructor() { }
+  constructor(
+    private heroService: HeroService,
+    private route: ActivatedRoute,
+    private location: Location
+  ) { }
 
-  ngOnInit() {
+  ngOnInit() : void {
+
+    this.route.paramMap
+      .switchMap((params: ParamMap) => this.heroService.getHero(+params.get('id')))
+      .subscribe(hero => this.hero = hero);
   }
-  saveChanges(p: string, st: string, sp: string) {
+  saveChanges(p: string, st: string, sp: string) : void {
 
     let power = +p;
     let stamina = +st;
@@ -34,18 +46,21 @@ export class HeroDetailComponent implements OnInit {
     this.hero.speed = speed;
     this.hero.stamina = stamina;
   }
-  delete() {
+  delete() : void {
     this.markDeleted.emit(this.hero);
   }
+  goBack(): void {
+    this.location.back();
+  }
 
-  @HostBinding("style.color") get getFontColour() {
+  // @HostBinding("style.color") get getFontColour() {
 
-    return this.fontColor;
-  }
-  @HostListener("mouseenter") onMouseEnter() {
-    this.fontColor = "#0651cc";
-  }
-  @HostListener("mouseleave") onMouseLeave() {
-    this.fontColor = "black";
-  }
+  //   return this.fontColor;
+  // }
+  // @HostListener("mouseenter") onMouseEnter() {
+  //   this.fontColor = "#0651cc";
+  // }
+  // @HostListener("mouseleave") onMouseLeave() {
+  //   this.fontColor = "black";
+  // }
 }
