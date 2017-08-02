@@ -1,26 +1,62 @@
 import { Injectable } from '@angular/core';
-import { Hero } from './../models/hero'
+import { Headers, Http } from '@angular/http';
+
+import 'rxjs/add/operator/toPromise';
+
+import { Hero } from './models/hero';
+
 
 @Injectable()
 export class HeroService {
 
+  private heroesUrl = 'api/heroes';  // URL to web api
+
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+
+  constructor(private http: Http) { }
+
   getHeroes(): Promise<Hero[]> {
-    return Promise.resolve([
-      { id: 11, name: 'Mr. Nice', power: 30, stamina: 40, speed: 30 },
-      { id: 12, name: 'Narco', power: 40, stamina: 40, speed: 20 },
-      { id: 13, name: 'Bombasto', power: 80, stamina: 10, speed: 10 },
-      { id: 14, name: 'Celeritas', power: 40, stamina: 40, speed: 20 },
-      { id: 15, name: 'Magneta', power: 30, stamina: 40, speed: 30 },
-      { id: 16, name: 'RubberMan', power: 10, stamina: 50, speed: 40 },
-      { id: 17, name: 'Dynama', power: 10, stamina: 40, speed: 50 },
-      { id: 18, name: 'Dr IQ', power: 10, stamina: 80, speed: 10 },
-      { id: 19, name: 'Magma', power: 40, stamina: 40, speed: 20 },
-      { id: 20, name: 'Tornado', power: 20, stamina: 10, speed: 70 }
-    ]);
+    return this.http.get(this.heroesUrl)
+      .toPromise()
+      .then(response => response.json().data as Hero[])
+      .catch(this.handleError);
   }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
+  }
+
   getHero(id: number): Promise<Hero> {
-    return this.getHeroes()
-      .then(heroes => heroes.find(hero => hero.id === id));
+    const url = `${this.heroesUrl}/${id}`;
+    return this.http.get(url)
+      .toPromise()
+      .then(response => response.json().data as Hero)
+      .catch(this.handleError);
+  }
+  update(hero: Hero): Promise<Hero> {
+    const url = `${this.heroesUrl}/${hero.id}`;
+    return this.http
+      .put(url, JSON.stringify(hero), { headers: this.headers })
+      .toPromise()
+      .then(() => hero)
+      .catch(this.handleError);
+  }
+
+  create(name: string): Promise<Hero> {
+    return this.http
+      .post(this.heroesUrl, JSON.stringify({ name: name }), { headers: this.headers })
+      .toPromise()
+      .then(res => res.json().data as Hero)
+      .catch(this.handleError);
+  }
+
+  delete(id: number): Promise<void> {
+    const url = `${this.heroesUrl}/${id}`;
+    return this.http.delete(url, { headers: this.headers })
+      .toPromise()
+      .then(() => null)
+      .catch(this.handleError);
   }
 
 }

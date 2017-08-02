@@ -7,22 +7,21 @@
     <label>name: </label>
      <input [(ngModel)]="hero.name" placeholder="name"> 
   </div> 
-  <div>
+  <!-- <div>
     <label>power: </label>
-    <input #power [ngModel]="hero.power">
+    <input [(ngModel)]="hero.power" type="number">
 
   </div>
   <div>
     <label>stamina: </label>
-    <input #stamina [ngModel]="hero.stamina">
+    <input [(ngModel)]="hero.stamina" type="number">
 
   </div>
   <div>
     <label>speed: </label>
-    <input #speed [ngModel]="hero.speed">
+    <input [(ngModel)]="hero.speed" type="number">
 
-  </div>
-  <button class="confirm" (click)="saveChanges(power.value, stamina.value, speed.value)">Save skills</button>
-  <button class="confirm" (click)="delete()">Delete</button>
+  </div> -->
+  <button class="confirm" (click)="saveChanges()">Save</button>
 </div>
 <button class="nav" (click)="goBack()">Back</button>

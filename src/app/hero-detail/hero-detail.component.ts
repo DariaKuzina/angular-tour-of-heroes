@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Directive, HostListener, HostBinding } from '@angular/core';
-import { Hero } from './../../models/hero'
+import { Hero } from './../models/hero'
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Location } from '@angular/common';
 import { HeroService } from './../hero.service'
@@ -12,7 +12,7 @@ import 'rxjs/add/operator/switchMap';
 })
 export class HeroDetailComponent implements OnInit {
   hero: Hero;
-  @Output() markDeleted = new EventEmitter<Hero>();
+ // @Output() markDeleted = new EventEmitter<Hero>();
   fontColor: string;
 
   constructor(
@@ -21,34 +21,28 @@ export class HeroDetailComponent implements OnInit {
     private location: Location
   ) { }
 
-  ngOnInit() : void {
+  ngOnInit(): void {
 
     this.route.paramMap
       .switchMap((params: ParamMap) => this.heroService.getHero(+params.get('id')))
       .subscribe(hero => this.hero = hero);
   }
-  saveChanges(p: string, st: string, sp: string) : void {
 
-    let power = +p;
-    let stamina = +st;
-    let speed = +sp;
+  saveChanges(): void {
 
-    if (isNaN(power) || power < 0 || isNaN(speed) || speed < 0 || isNaN(stamina) || stamina < 0) {
-      alert('Every skill must be non-negative number');
-      return;
-    }
-    else if ((power + speed + stamina) != 100) {
-      alert('Sum of skills must me 100');
-      return;
-    }
+  //  if (!this.hero.validate()) {
+  //     alert('Every skill must me non-negative number and their sum must be 100')
+  //     return;
+  //   } 
 
-    this.hero.power = power;
-    this.hero.speed = speed;
-    this.hero.stamina = stamina;
+    this.heroService.update(this.hero)
+      .then(() => this.goBack());
   }
-  delete() : void {
-    this.markDeleted.emit(this.hero);
-  }
+
+  // delete(): void {
+  //   this.markDeleted.emit(this.hero);
+  // }
+
   goBack(): void {
     this.location.back();
   }
